@@ -1,67 +1,53 @@
-buildscript {
-  ext.VeeclipRecorder = [
-    kotlinVersion: "2.0.21",
-    minSdkVersion: 24,
-    compileSdkVersion: 36,
-    targetSdkVersion: 36
-  ]
-
-  ext.getExtOrDefault = { prop ->
-    if (rootProject.ext.has(prop)) {
-      return rootProject.ext.get(prop)
-    }
-
-    return VeeclipRecorder[prop]
-  }
-
-  repositories {
-    google()
-    mavenCentral()
-  }
-
-  dependencies {
-    classpath "com.android.tools.build:gradle:8.7.2"
-    // noinspection DifferentKotlinGradleVersion
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
-  }
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
-
-apply plugin: "com.android.library"
-apply plugin: "kotlin-android"
-
-apply plugin: "com.facebook.react"
+apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
-  namespace "com.talkvee.reactnativeveecliprecorder"
+    namespace "com.talkvee.reactnativeveecliprecorder"
+    compileSdk safeExtGet('compileSdkVersion', 35)
 
-  compileSdkVersion getExtOrDefault("compileSdkVersion")
-
-  defaultConfig {
-    minSdkVersion getExtOrDefault("minSdkVersion")
-    targetSdkVersion getExtOrDefault("targetSdkVersion")
-  }
-
-  buildFeatures {
-    buildConfig true
-  }
-
-  buildTypes {
-    release {
-      minifyEnabled false
+    defaultConfig {
+        minSdk safeExtGet('minSdkVersion', 24)
+        targetSdk safeExtGet('targetSdkVersion', 35)
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'proguard-rules.pro'
     }
-  }
 
-  lint {
-    disable "GradleCompatible"
-  }
+    buildTypes {
+        release {
+            minifyEnabled false
+            matchingFallbacks = ['release']
+        }
+        debug {
+            matchingFallbacks = ['debug', 'release']
+        }
+    }
 
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
+    publishing {
+        singleVariant("release")
+        singleVariant("debug")
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
 }
 
 dependencies {
-  implementation "com.facebook.react:react-android"
+    implementation "com.facebook.react:react-android"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:2.1.20"
+    compileOnly 'io.getstream:stream-webrtc-android:1.1.1'
 }
