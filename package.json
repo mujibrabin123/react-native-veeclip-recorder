@@ -2,12 +2,12 @@
   "name": "@talkvee/react-native-veeclip-recorder",
   "version": "0.1.0",
   "description": "Native duet clip recorder for Talkvee",
-  "main": "./lib/module/index.js",
-  "types": "./lib/typescript/src/index.d.ts",
+  "main": "lib/module/index.js",
+  "types": "lib/typescript/src/index.d.ts",
   "exports": {
     ".": {
-      "source": "./src/index.tsx",
       "types": "./lib/typescript/src/index.d.ts",
+      "import": "./lib/module/index.js",
       "default": "./lib/module/index.js"
     },
     "./package.json": "./package.json"
@@ -32,7 +32,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "prepare": "bob build",
+    "build": "bob build",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib"
   },
   "keywords": [
@@ -42,7 +42,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ARYA-KH003/react-native-veeclip-recorder.git"
+    "url": "git+ssh://git@github.com/mujibrabin123/react-native-veeclip-recorder.git"
   },
   "author": "Talkvee <contact@talkvee.com> (https://talkvee.com)",
   "license": "MIT",
